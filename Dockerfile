@@ -7,6 +7,7 @@ ENV NVM_VERSION 0.35.2
 ENV NODE_VERSION 12
 ENV SOLSA_VERSION 0.3.5
 ENV KUBECTL_VERSION 1.15.5
+ENV YQ_VERSION=4.6.3
 
 RUN dnf install -y dnf-plugins-core --disableplugin=subscription-manager && \
     dnf install -y golang --disableplugin=subscription-manager && \
@@ -23,7 +24,7 @@ RUN curl -O -L https://github.com/projectcalico/calicoctl/releases/download/v${S
     chmod +x /usr/local/bin/calicoctl
 
 # Kustomize
-RUN opsys=linux && \
+RUN opsys=linux_amd64 && \
     curl -s https://api.github.com/repos/kubernetes-sigs/kustomize/releases |\
       grep browser_download |\
       grep $opsys |\
@@ -31,7 +32,7 @@ RUN opsys=linux && \
       grep /kustomize/v |\
       sort | tail -n 1 |\
       xargs curl -O -L && \
-    tar xzf ./kustomize_v*_${opsys}_amd64.tar.gz && \
+    tar xzf ./kustomize_v*_${opsys}.tar.gz && \
     mv kustomize /usr/local/bin/kustomize && \
     chmod +x /usr/local/bin/kustomize
 
@@ -77,7 +78,7 @@ COPY --chown=devops:devops src/etc/* ${HOME}/etc/
 RUN curl -sL https://ibm.biz/idt-installer | bash && \
     ibmcloud config --check-version=false && \
     ibmcloud plugin install cloud-databases -f && \
-    ibmcloud plugin install observe-service -f && \
+    ibmcloud plugin install observe-service -f
 
 # Install nvm
 RUN curl -o- https://raw.githubusercontent.com/creationix/nvm/v${NVM_VERSION}/install.sh | bash
