@@ -144,6 +144,10 @@ RUN sudo chown -R devops ${HOME} && sudo chgrp -R 0 ${HOME} && sudo chmod -R g=u
 RUN curl -LO https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64 && \
     chmod a+x jq-linux64 && \
     sudo mv jq-linux64 /usr/local/bin/jq
+    
+RUN curl -LO https://github.com/mikefarah/yq/releases/download/v${YQ_VERSION}/yq_linux_amd64 && \
+    chmod a+x yq_linux_amd64 && \
+    sudo mv yq_linux_amd64 /usr/local/bin/yq
 
 RUN sudo dnf clean all
 
